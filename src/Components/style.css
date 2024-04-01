@@ -1,0 +1,159 @@
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .signup-form input[type='text'],
+  .signup-form input[type='email'],
+  .signup-form input[type='phone'],
+  .signup-form input[type='password'] {
+    width: 95%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .signup-form input[type='submit'] {
+    width: 100%;
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .signup-form input[type='submit']:hover {
+    background-color: #FDA339;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    text-align: center;
+  }
+  
+  p button {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  p button:hover {
+    text-decoration: none;
+  }
+  
+  /* Responsive CSS */
+  
+  @media screen and (max-width: 600px) {
+    .signup-form {
+      max-width: 100%;
+    }
+  }
+  
+  .main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .login-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .input-container {
+    margin-bottom: 15px;
+  }
+  
+  .login-input {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .login-input:focus {
+    border-color: #FDA339;
+  }
+  
+  .login-error {
+    color: red;
+    margin-top: 5px;
+  }
+  
+  .login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .login-remember {
+    display: flex;
+    align-items: center;
+  }
+  
+  .login-remember input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .login-submit {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #FDA339;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .login-forgot {
+    color: #FDA339;
+    cursor: pointer;
+  }
+  
+  p {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .signup-button {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .signup-button:hover {
+    text-decoration: none;
+  }
+  

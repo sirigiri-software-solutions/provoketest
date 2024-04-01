@@ -1,0 +1,181 @@
+import React, { createContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import speakNchatLogo from '../Images/Frame 63.png'
+import speakNchatTextLogo from '../Images/Frame 64.png'
+import "./index.css"
+export const loginContext = createContext();
+ 
+const SignIn = () => {
+  const navigate = useNavigate();
+  const initialState = { Id: "", email: "", password: "" };
+  const [loginData, setLoginData] = useState(initialState);
+  const [data, setData] = useState([]);
+  const [loginErrors, setLoginErrors] = useState({});
+  const [dataWithID,setDataWithID] = useState({});
+ 
+  useEffect(() => {
+    axios
+      .get("https://speak-n-chat-default-rtdb.firebaseio.com/register.json")
+      .then((response) => {
+        const fetchedData = response.data || {};
+        setDataWithID(fetchedData);
+        let data = Object.values(fetchedData);
+        setData(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    const isLoggedIn = localStorage.getItem("userInfo");
+    if (isLoggedIn) {
+      navigate("/mainPage");
+    }else{
+      navigate("/login")
+    }
+  }, [navigate]);
+
+ 
+  const handleData = (event) => {
+    setLoginData({
+      ...loginData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    let errors = {};
+    if (loginData.email === "") {
+      errors.email = "Enter email to login";
+      isValid = false;
+    }
+    if (loginData.password === "") {
+      errors.password = "Enter password to login";
+      isValid = false;
+    }
+    setLoginErrors(errors);
+    return isValid;
+  };
+ 
+  const checkData = (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      const itemExist = data.findIndex(
+        (item) => item.email === loginData.email
+
+      );
+      //console.log(data[itemExist])
+      if (itemExist > -1) {
+        if (
+          data[itemExist].email === loginData.email &&
+          data[itemExist].password === loginData.password
+        ) { 
+
+          // const getUser = dataWithID.filter((each) => each.email === loginData.email);
+
+          // console.log(getUser);
+          const getUser = Object.entries(dataWithID)
+            .filter(([id, user]) => user.email === loginData.email)
+            .map(([id, user]) => ({ id, ...user }));
+
+           console.log(getUser)
+           const id = getUser[0].id;
+          console.log(id);
+          localStorage.setItem('userInfo',id);
+ 
+          
+       
+          alert("You are logged in successfully");
+        // dispatch(editForm(data[itemExist]))
+          setLoginData(initialState);
+          navigate("/mainPage");
+          // console.log(flag, "flag");
+        } else {
+          alert("Password Wrong, please enter correct password");
+        }
+      } else {
+        alert("You are new user so, register please");
+      }
+    }
+    //console.log(flag,'flag')
+  };
+  const hideErrors = (event) => {
+    setLoginErrors({
+      ...loginErrors,
+      [event.target.name]: "",
+    });
+  };
+ 
+  const checkErrors = (event) => {
+    if (event.target.value === "") {
+      setLoginErrors({
+        ...loginErrors,
+        [event.target.name]: "Enter " + event.target.name,
+      });
+    }
+  };
+ 
+  
+//   console.log(myId,'outside')
+ 
+  return (
+    <React.Fragment>
+      <main>
+      <div className="main-container">
+        <div className="logo-container">
+          <img className="speakNchatLogo" src={speakNchatLogo} alt="speak-n-chat-logo" />
+          {/* <img className="text-logo" src={speakNchatTextLogo} alt="speak-n-chat-text-logo" /> */}
+        </div>
+        <hr className="hr-line"/>
+       <div class="login-container">
+         <form class="login-form" onSubmit={checkData}>
+           <div class="input-container">
+             <input
+               type="email"
+               class={`login-input login_page_username ${loginErrors?.email && 'border border-danger'}`}
+               placeholder="Username or Email"
+               onChange={handleData}
+               onFocus={hideErrors}
+               onBlur={checkErrors}
+               value={loginData.email}
+               name="email"
+             />
+             {loginErrors.email ? (
+               <small class="login-error">{loginErrors.email}</small>
+             ) : null}
+           </div>
+           <div class="input-container">
+             <input
+               type="password"
+               class={`login-input login_page_username ${loginErrors?.password && 'border border-danger'}`}
+               placeholder="Password"
+               onChange={handleData}
+               onFocus={hideErrors}
+               onBlur={checkErrors}
+               value={loginData.password}
+               name="password"
+             />
+             {loginErrors.password ? (
+               <small class="login-error">{loginErrors.password}</small>
+             ) : null}
+           </div>
+           <input type="submit" class="login-submit" value="Login" />
+           <div class="login-options">
+             <p class="login-forgot">Forgot Password?</p>
+           </div>
+         </form>
+         <p className="createNewButton">
+           <Link to="/SignUp"><button type="button" class="signup-button">Create new account</button></Link>
+           
+         </p>
+       </div>
+      </div>
+      </main>
+ 
+ 
+    </React.Fragment>
+  );
+};
+ 
+export default SignIn;
