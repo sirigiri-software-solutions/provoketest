@@ -46,10 +46,12 @@ const UserPage =() =>{
       const dataInfo = ref(database,`userDataInfo${userId}`);
       onValue(dataInfo,(snapshot)=>{
         const data = snapshot.val();
+        console.log(data)
         if(data){
           setuserDataInfo(data.userFormData);
         }
       })
+      
     }, []);
     
  

@@ -1783,12 +1783,12 @@ const MainPage =() =>{
         listening,
         browserSupportsContinuousListening
       } = useSpeechRecognition();
-      const {
+    const {
         transcript,
         resetTranscript,
         browserSupportsSpeechRecognition
       } = useSpeechRecognition({ commandss });
-      const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
         const { name, value } = event.target;
         setUserFormData({
           ...userFormData,
@@ -1839,6 +1839,7 @@ const MainPage =() =>{
         
 
     }, [navigate]);
+
     useEffect(() => {
         // Check if each field is filled
         const valid = Object.values(userFormData).every(val => val !== '');
@@ -1883,13 +1884,15 @@ const handleUserInfo = () => {
             navigate("/login")
          }
     }
-    const dataInfo = ref(database, `userDataInfo${userId}`); // Assuming 'chat' is the path where you want to store chat data
-    set(dataInfo, { userFormData:'' }) // Using push() to generate unique keys
-        .then(() => {
-            console.log("cleared userDataInfo")
-        }).catch(error => {
-            console.error("Error adding data to Firebase: ", error);
-        });
+
+
+   //  const dataInfo = ref(database, `userDataInfo${userId}`); // Assuming 'chat' is the path where you want to store chat data
+   //  set(dataInfo, { userFormData:'' }) // Using push() to generate unique keys
+   //      .then(() => {
+   //          console.log("cleared userDataInfo")
+   //      }).catch(error => {
+   //          console.error("Error adding data to Firebase: ", error);
+   //      });
     // const handleTranscript = (e) => {
     //     setTranscript(e.target.value);
     //     resetTranscript(); // Reset the speech recognition transcript when the user manually types in the input
@@ -1970,8 +1973,9 @@ const handleUserInfo = () => {
         setIsOpen(false)
         setshowDataInfoPopup(false);
       };
-      const handleCommand = (item) => {
-        setChatInput(item.text)
+
+    const handleCommand = (item) => {
+       setChatInput(item.text)
       }
       const copyToClipboard = () => {
         navigator.clipboard.writeText(userLink)
@@ -2029,50 +2033,77 @@ const handleUserInfo = () => {
  
     }
 
-    // const handleUserDataClearBtn = () => {
-    //     setUserFormData({
-    //         companyName: '',
-    //     payroleName: '',
-    //     to: '',
-    //     from: '',
-    //     experiences: '',
-    //     experiencesRelevant: '',
-    //     currentCTC: '',
-    //     expectedCTC: ''
-    //     })
-    //     const dataInfo = ref(database, `userDataInfo${userId}`); // Assuming 'chat' is the path where you want to store chat data
-    //         set(dataInfo, { userFormData:'' }) // Using push() to generate unique keys
-    //             .then(() => {
-    //                 console.log("cleared userDataInfo")
-    //             }).catch(error => {
-    //                 console.error("Error adding data to Firebase: ", error);
-    //             });
-
-
-    // }
     const handleUserDataClearBtn = () => {
-      // Clearing the local state for user form data
-      setUserFormData({
-          companyName: '',
-          payroleName: '',
-          to: '',
-          from: '',
-          experiences: '',
-          experiencesRelevant: '',
-          currentCTC: '',
-          expectedCTC: ''
-      });
+        setUserFormData({
+            companyName: '',
+        payroleName: '',
+        to: '',
+        from: '',
+        experiences: '',
+        experiencesRelevant: '',
+        currentCTC: '',
+        expectedCTC: ''
+        })
+        const dataInfo = ref(database, `userDataInfo${userId}`); // Assuming 'chat' is the path where you want to store chat data
+            set(dataInfo, { userFormData:'' }) // Using push() to generate unique keys
+                .then(() => {
+                    console.log("cleared userDataInfo")
+                }).catch(error => {
+                    console.error("Error adding data to Firebase: ", error);
+                });
+
+
+    }
+
+
+//     const handleUserDataClearBtn = () => {
+//       // Clearing the local state for user form data
+//       setUserFormData({
+//           companyName: '',
+//           payroleName: '',
+//           to: '',
+//           from: '',
+//           experiences: '',
+//           experiencesRelevant: '',
+//           currentCTC: '',
+//           expectedCTC: ''
+//       });
   
-      // Instead of updating the entire user data to an empty object, only clear the specific fields in the database
-      const userDataRef = ref(database, `userDataInfo${userId}`);
-      set(userDataRef.child('userFormData'), {})
-          .then(() => {
-              console.log("Cleared userFormData in Firebase");
-          })
-          .catch(error => {
-              console.error("Error clearing userFormData in Firebase: ", error);
-          });
-  }
+//       // Instead of updating the entire user data to an empty object, only clear the specific fields in the database
+//       const userDataRef = ref(database, `userDataInfo${userId}`);
+//       set(userDataRef.child('userFormData'), {})
+//           .then(() => {
+//               console.log("Cleared userFormData in Firebase");
+//           })
+//           .catch(error => {
+//               console.error("Error clearing userFormData in Firebase: ", error);
+//           });
+//   }
+
+
+
+//   const handleUserDataClearBtn = () => {
+//    const userDataRef = ref(database, `userDataInfo${userId}`);
+//    set(userDataRef, {}) // Clear the entire userDataInfo node
+//        .then(() => {
+//            console.log("Cleared userDataInfo in Firebase");
+//            // After successfully clearing Firebase data, update local state
+//            setUserFormData({
+//                companyName: '',
+//                payroleName: '',
+//                to: '',
+//                from: '',
+//                experiences: '',
+//                experiencesRelevant: '',
+//                currentCTC: '',
+//                expectedCTC: ''
+//            });
+//        })
+//        .catch(error => {
+//            console.error("Error clearing userDataInfo in Firebase: ", error);
+//        });
+// }
+
   
    
     return (
