@@ -432,7 +432,13 @@ details{
   z-index: 9999;
   height: 500px;
   width: 600px;
- 
+}
+@media screen and (max-width:768px){
+    .userDataInfoPopupContainer{
+        width:330px;
+        left:50%;
+        height:680px;
+    }
 }
 .userDataInfoClosebtn{
     display: block;
@@ -480,6 +486,17 @@ details{
 .userDataInfoClearButton:hover{
     background-color:#555;
 }
+@media screen and (max-width:768px){
+    .userDataInfoSaveButton{
+        left:15%;
+    }
+    .userDataInfoClosebtn{
+        left:38%;
+    }
+    .userDataInfoClearButton{
+        left:62%;
+    }
+}
  
  
 .userInfoPopUpHeading{
@@ -493,6 +510,12 @@ details{
     display: inline-block;
     font-size:20px;
     width:150px;
+}
+@media screen and (max-width:768px){
+    .userInfoLabelText{
+        width:200px;
+        margin-bottom:3px;
+    }
 }
 .userInfoInputField{
     width:250px;
