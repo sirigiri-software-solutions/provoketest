@@ -149,3 +149,7 @@ main{
       width: 1px;
       height: 100%;
   }
+  .login-status{
+    color:red;
+    text-align:left;
+  }
