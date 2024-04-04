@@ -3,6 +3,7 @@ import { useState,useEffect } from 'react';
 import {BsSearch} from 'react-icons/bs'
 import axios from "axios";
 import "./index.css"
+import Cookies from 'js-cookie'
 import speakNChatLogo from "../Images/Frame 63.png"
 import speakNChatLogoText from "../Images/Frame 64.png";
 import { MdPerson } from "react-icons/md";
@@ -14,6 +15,8 @@ import SpeechRecognition, {
 
 const MainPage =() =>{
     const userId = localStorage.getItem('userInfo');
+   //  const userId = Cookies.get("userInfo");
+   //  const userId = sessionStorage.getItem("userInfo");
     const [searchInput, setSearchInput] = useState('');
     const navigate = useNavigate();
     const [userName,setuserName] = useState('')
@@ -37,6 +40,12 @@ const MainPage =() =>{
       });
       const [newCommand, setNewCommand] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
+
+    const [buttonsPopUp,setButtonsPopUp] = useState(false)
+    const [isRecording, setIsRecording] = useState(false);
+
+
+
     const commandss = 
     [
     {
@@ -1788,8 +1797,13 @@ const MainPage =() =>{
         resetTranscript,
         browserSupportsSpeechRecognition
       } = useSpeechRecognition({ commandss });
+
+      
+
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+       
         setUserFormData({
           ...userFormData,
           [name]: value
@@ -1815,12 +1829,21 @@ const MainPage =() =>{
             commands: ["Class Components", "Functional Components"]
         }
     ];
-    
-    
 
+
+
+
+  
+   
+
+
+        
+    
 
     useEffect(() => {
         const userId = localStorage.getItem('userInfo');
+      //   const userId = Cookies.get("userInfo")
+      //   const userId = sessionStorage.getItem("userInfo");
         if (!userId) {
             navigate('/login');
         }
@@ -1846,6 +1869,87 @@ const MainPage =() =>{
         setIsFormValid(valid);
     }, [userFormData]);
 
+   
+    const handleBeforeUnload = (event) => {
+      try {
+          const navigationTiming = performance.getEntriesByType('navigation')[0];
+          if (navigationTiming.type !== 'reload' && navigationTiming.type !== 'back_forward' && navigationTiming.type !== 'navigate') {
+            // If the page is being unloaded (i.e., the browser window is being closed), clear localStorage
+            localStorage.clear();
+        }
+      } catch (error) {
+          console.error('An error occurred:', error);
+      }
+  };
+  
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+
+
+// const handleUnload = (event) => {
+//    try {
+//        if (!event.persisted) {
+//            localStorage.clear();
+//        }
+//    } catch (error) {
+//        console.error('An error occurred while clearing localStorage:', error);
+//    }
+// };
+
+// const handleBeforeUnload = (event) => {
+//    try {
+//        const navigationTiming = performance.getEntriesByType('navigation')[0];
+//        if (navigationTiming && navigationTiming.type === 'unload') {
+//            // If the page is being unloaded (i.e., the browser window is being closed), clear localStorage
+//            localStorage.clear();
+//        }
+//    } catch (error) {
+//        console.error('An error occurred:', error);
+//    }
+// };
+
+// window.addEventListener('beforeunload', handleBeforeUnload);
+// window.addEventListener('unload', handleUnload);
+
+
+// const handleBeforeUnload = (event) => {
+//    try {
+//        // Check if the event is not due to a persisted navigation (like refreshing)
+//        if (!event.persisted) {
+//            // If the page is being unloaded (i.e., the browser window is being closed), clear localStorage
+//            localStorage.clear();
+//        }
+//    } catch (error) {
+//        console.error('An error occurred:', error);
+//    }
+// };
+
+// window.addEventListener('beforeunload', handleBeforeUnload);
+
+
+
+
+
+  
+  
+  
+
+
+   //  const handleBeforeUnload = (event) => {
+   //    // Check if the page is being refreshed
+   //    if (event.clientY < 0) {
+   //      // This will execute when user navigates away from the page or closes the browser tab
+   //      localStorage.clear();
+   //    }
+   //  };
+    
+   //  window.addEventListener('beforeunload', handleBeforeUnload);
+
+   
+    
+    
+    
+
 
 const handleUserInfo = () => {
         console.log(userFormData)
@@ -1868,19 +1972,16 @@ const handleUserInfo = () => {
                     console.error("Error adding data to Firebase: ", error);
                 });
 
-
-
-    // const filteredCommands = commands.filter(category =>
-    //     category.category.toLowerCase().includes(searchInput.toLowerCase()) ||
-    //     category.commands.some(command => command.toLowerCase().includes(searchInput.toLowerCase()))
-    // );
-
     const filteredCommands = commandss?.filter(command => command.command.toLowerCase().includes(searchInput.toLowerCase())) || commandss
 
     const handleSignOut = () => {
          const user = localStorage.getItem('userInfo');
+         // const user = Cookies.get("userInfo");
+         // const user = sessionStorage.getItem("userInfo");
          if(user){
             localStorage.removeItem('userInfo')
+            // Cookies.remove("userInfo");
+            // sessionStorage.removeItem("userInfo")
             navigate("/login")
          }
     }
@@ -1905,7 +2006,7 @@ const handleUserInfo = () => {
     //   }
       const handleSendButton = () => {
         const chatInputData = chatInput; // Assuming you have the chat input available
-    
+        setButtonsPopUp(true)
         if(userId && chatInputData.trim() !== ""){
             const chatRef = ref(database, `data${userId}`); // Assuming 'chat' is the path where you want to store chat data
             set(chatRef, { chatInputData }) // Using push() to generate unique keys
@@ -1914,6 +2015,9 @@ const handleUserInfo = () => {
                     console.error("Error adding data to Firebase: ", error);
                 });
         }
+        setTimeout(() => {
+         setButtonsPopUp(false);
+       },600);
     }
     // const handleSendButton = () => {
     //     const userId = localStorage.getItem('userInfo');
@@ -2104,6 +2208,20 @@ const handleUserInfo = () => {
 //        });
 // }
 
+
+const handleStartButton = () => {
+   SpeechRecognition.startListening({
+     continuous: true,
+     language: "en-IN"
+   });
+   setIsRecording(true);
+ };
+
+ const handleStopButton = () => {
+   SpeechRecognition.stopListening();
+   setIsRecording(false);
+ };
+
   
    
     return (
@@ -2204,21 +2322,21 @@ const handleUserInfo = () => {
                 </div>
                   {/* <textarea placeholder='Mic' type="text" className='mainPtopInputContainer' value={transcript}/> */}
                   <textarea placeholder='Mic' type="text" className='mainPtopInputContainer' value={transcript} />
+           
+           <div className='btnTextContainer'>
+                {isRecording &&   <div className="recordingIndicator">
+            Recording<span className="blink">...</span>
+          </div> }
                   <div className="mainPbuttonsContainer">
-                    <button className="startButton button" onClick={() => SpeechRecognition.startListening({
-            continuous: true,
-            language: "en-IN"
-          })}>Start</button>
-                    <button className="stopButton button"  onClick={SpeechRecognition.stopListening}>Stop</button>
-                    <button className="resetButton button" 
-        onClick={resetTranscript}
-        
-                    >Reset</button>
+                    <button className="startButton button" onClick={handleStartButton}>Start</button>
+                    <button className="stopButton button"  onClick={handleStopButton}>Stop</button>
+                    <button className="resetButton button" onClick={resetTranscript}>Reset</button>
                   </div>
-
+            </div>
                   <textarea value={chatInput} placeholder='Chat' type="text" className='mainPbottomInputContainer' onChange={(e) => setChatInput(e.target.value)} />
                   <div className='mainPbuttonsContainer'>
-                    <button onClick={handleSendButton} className='stopButton button'>Send</button>
+                    <button id="sendButton" onClick={handleSendButton} className='stopButton button'>Send</button>
+                    {buttonsPopUp && <div className="popup" id="popup" >Chat Sent !</div>}
                     <button onClick={handleResetButton} className="resetButton button">Reset</button>
                   </div>
                </div>

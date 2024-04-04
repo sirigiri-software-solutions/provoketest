@@ -135,7 +135,13 @@ details{
     color:#fff;
     padding:12px;
     border-radius:10px;
+    cursor: pointer;
 }
+.signoutButton:hover {
+    background-color:aqua;
+    color:black;
+}
+
 .rightSectionBottomContainer{
     padding:30px;
 
@@ -156,11 +162,13 @@ details{
     margin-top:10px;
     padding-right:10px;
     margin-bottom:0px;
+    width:100%;
 }
 @media screen and (max-width:500px){
     .mainPbuttonsContainer{
         gap:5px;
         padding-right:0px;
+        margin-left:10px;
     }
 }
 .button{
@@ -172,6 +180,11 @@ details{
     color:#fff;
     border-radius:8px;
     font-size:15px;
+    cursor: pointer;
+}
+.button:hover{
+    background-color:aqua;
+    color:black;
 }
 .startButton{
     background-color:green;
@@ -528,3 +541,49 @@ details{
     margin-bottom:10px;
  
 }
+.popup {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
+    bottom:160px;
+    right:110px;
+  }
+@media screen and (max-width:768px){
+    .popup{
+        bottom:-150px;
+        right:95px;
+        
+    }
+}
+  
+  #sendButton:hover + #popup {
+    display: block;
+  }
+  .recordingIndicator {
+    font-size: 18px;
+    font-weight: bold;
+    color: red; /* or any other color you prefer */
+  }
+  
+  .blink {
+    animation: blink-animation 1s infinite;
+  }
+  
+  @keyframes blink-animation {
+    0%, 50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .btnTextContainer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }

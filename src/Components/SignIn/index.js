@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import speakNchatLogo from '../Images/Frame 63.png'
 import speakNchatTextLogo from '../Images/Frame 64.png'
 import "./index.css"
+import Cookies from 'js-cookie'
 export const loginContext = createContext();
  
 const SignIn = () => {
@@ -13,6 +14,7 @@ const SignIn = () => {
   const [data, setData] = useState([]);
   const [loginErrors, setLoginErrors] = useState({});
   const [dataWithID,setDataWithID] = useState({});
+  const [loginStatus, setLoginStatus] = useState("");
  
   useEffect(() => {
     axios
@@ -28,8 +30,13 @@ const SignIn = () => {
   useEffect(() => {
     // Check if the user is already logged in
     const isLoggedIn = localStorage.getItem("userInfo");
+    // const isLoggedIn = Cookies.get("userInfo");
+    // const isLoggedIn = sessionStorage.getItem("userInfo");
+    console.log(isLoggedIn)
+
     if (isLoggedIn) {
       navigate("/mainPage");
+      console.log("Working");
     }else{
       navigate("/login")
     }
@@ -81,21 +88,18 @@ const SignIn = () => {
 
            console.log(getUser)
            const id = getUser[0].id;
-          console.log(id);
-          localStorage.setItem('userInfo',id);
- 
-          
-       
-          alert("You are logged in successfully");
+          // Cookies.set("userInfo",id);
+          // sessionStorage.setItem("userInfo",id)
         // dispatch(editForm(data[itemExist]))
+        localStorage.setItem("userInfo",id);
           setLoginData(initialState);
           navigate("/mainPage");
           // console.log(flag, "flag");
         } else {
-          alert("Password Wrong, please enter correct password");
+          setLoginStatus("Password is incorrect, please enter the correct password");
         }
       } else {
-        alert("You are new user so, register please");
+        setLoginStatus("User does not exist, please register");
       }
     }
     //console.log(flag,'flag')
@@ -160,6 +164,7 @@ const SignIn = () => {
                <small class="login-error">{loginErrors.password}</small>
              ) : null}
            </div>
+           {loginStatus && <p className="login-status">{loginStatus}</p>}
            <input type="submit" class="login-submit" value="Login" />
            <div class="login-options">
              <p class="login-forgot">Forgot Password?</p>
